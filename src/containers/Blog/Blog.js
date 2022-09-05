@@ -11,7 +11,8 @@ class Blog extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            posts: []
+            posts: [],
+            selectedPostId: null
         }
     }
 
@@ -26,19 +27,24 @@ class Blog extends Component {
             .catch(error => console.log(error))
     }
 
+    onClickPostHandler = (index) => {
+        this.setState( {selectedPostId: index} )
+    }
+
     render () {
         return (
             <div>
                 <section className="Posts">
                     { 
-                        this.state.posts.map(post => 
+                        this.state.posts.map((post, index) => 
                             <Post 
                                 key={post.id}
+                                clicked={() => this.onClickPostHandler(index+1)}
                                 title={post.title} />) 
                     }
                 </section>
                 <section>
-                    <FullPost />
+                    <FullPost postClicked={this.state.selectedPostId} />
                 </section>
                 <section>
                     <NewPost />
