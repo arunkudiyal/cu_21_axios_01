@@ -7,29 +7,46 @@ class FullPost extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedPost: {}
+            selectedPost: null
         }
     }
 
     componentDidUpdate() {
         let url = `https://jsonplaceholder.typicode.com/posts/${this.props.postClicked}`
-        axios.get(url)
-            .then(response => this.setState({selectedPost: response.data}))
+        if(this.state.selectedPost === null || this.props.postClicked !== this.state.selectedPost.id) {
+            axios.get(url)
+            .then(response => {
+                this.setState({selectedPost: response.data})
+            })
             .catch(error => console.log(error))
+        }
+    }
+
+    onDeletePostHandler = (id) => {
+        // Reuest for delete
+        let url = `https://jsonplaceholder.typicode.com/posts/${id}`
+        axios.delete(url)
+            .then(response => console.log('Response from the API', response))
+            .catch(err => console.log(err))
     }
 
     render () {
-        let post = <p>Please select a Post!</p>;
-        post = (
-            <div className="FullPost">
-                <h1>Title</h1>
-                <p>Content</p>
-                <div className="Edit">
-                    <button className="Delete">Delete</button>
+        let post = <p style={{ textAlign: 'center' }}>Please select a Post!</p>;
+        if(this.props.postClicked) {
+            post = <p style={{ textAlign: 'center' }}>Loading...</p>;
+        }
+        if(this.state.selectedPost) {
+            post = (
+                <div className="FullPost">
+                    <h1>{this.state.selectedPost.title}</h1>
+                    <p>{this.state.selectedPost.body}</p>
+                    <div className="Edit">
+                        <button onClick={() => this.onDeletePostHandler(this.props.postClicked)} className="Delete">Delete</button>
+                    </div>
                 </div>
-            </div>
-
-        );
+            );
+        }
+        
         return post;
     }
 }

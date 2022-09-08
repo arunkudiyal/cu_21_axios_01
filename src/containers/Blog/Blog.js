@@ -27,8 +27,8 @@ class Blog extends Component {
             .catch(error => console.log(error))
     }
 
-    onClickPostHandler = (index) => {
-        this.setState( {selectedPostId: index} )
+    onClickPostHandler = (id) => {
+        this.setState( {selectedPostId: id} )
     }
 
     render () {
@@ -36,10 +36,10 @@ class Blog extends Component {
             <div>
                 <section className="Posts">
                     { 
-                        this.state.posts.map((post, index) => 
+                        this.state.posts.map(post => 
                             <Post 
                                 key={post.id}
-                                clicked={() => this.onClickPostHandler(index+1)}
+                                clicked={() => this.onClickPostHandler(post.id)}
                                 title={post.title} />) 
                     }
                 </section>
