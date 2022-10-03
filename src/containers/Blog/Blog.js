@@ -1,54 +1,50 @@
 import React, { Component } from 'react';
 
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
+import { Link, Routes, Route } from 'react-router-dom'
+
+import Home from '../../components/Home/Home'
+import Posts from '../../components/Posts/Posts';
 import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
 
-import axios from 'axios'
-
 class Blog extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            posts: [],
-            selectedPostId: null
-        }
-    }
-
-    componentDidMount() {
-        // HTTP Request
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-            .then(response => {
-                let postData = response.data
-                postData.splice(8)
-                this.setState({ posts: postData })
-            })
-            .catch(error => console.log(error))
-    }
-
-    onClickPostHandler = (id) => {
-        this.setState( {selectedPostId: id} )
-    }
-
     render () {
         return (
             <div>
-                <section className="Posts">
-                    { 
-                        this.state.posts.map(post => 
-                            <Post 
-                                key={post.id}
-                                clicked={() => this.onClickPostHandler(post.id)}
-                                title={post.title} />) 
-                    }
-                </section>
-                <section>
-                    <FullPost postClicked={this.state.selectedPostId} />
-                </section>
-                <section>
-                    <NewPost />
-                </section>
+                <div>
+                    <nav>
+                        <ul style={{ display: 'flex', justifyContent: 'space-around', listStyle: 'none' }}>
+                            <li>
+                                <a style={{ textDecoration: 'none' }} href="/">Home</a>
+                            </li>
+                            <li>
+                                <Link style={{ textDecoration: 'none' }} to="/posts">Posts</Link>
+                            </li>
+                            <li>
+                                <Link style={{ textDecoration: 'none' }} to="/new-post">New Post</Link>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <hr />
+                <div>
+                    {/* v.5 --> <Route path='/posts' component={Posts} /> */}
+                    <Routes>
+                        <Route path='/' element={<Home />} />
+                        <Route path='/posts' element={<Posts />} />
+                        <Route path='/new-post' element={<NewPost />} />
+                    </Routes>
+
+                    {/* <section className="Posts">
+                        <Posts />
+                    </section>
+                    <section> */}
+                        {/* <FullPost postClicked={this.state.selectedPostId} /> */}
+                    {/* </section>
+                    <section>
+                        <NewPost />
+                    </section> */}
+                </div>
             </div>
         );
     }
