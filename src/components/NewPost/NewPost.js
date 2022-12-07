@@ -15,8 +15,10 @@ class NewPost extends Component {
             title: this.state.title,
             body: this.state.content
         }
-
-        axios.post('https://jsonplaceholder.typicode.com/posts', postData)
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        axios.post('https://jsonplaceholder.typicode.com/posts', postData, headers )
             .then(response => console.log(response))
             .catch(err => console.log(err))
     }
